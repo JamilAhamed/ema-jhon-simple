@@ -13,19 +13,28 @@ export const handleGoggleSignIn = () => {
   return firebase.auth().signInWithPopup(googleProvider)
     .then(res => {
       const { displayName, photoURL, email } = res.user;
-      const signInUser = {
+      const signedInUser = {
         isSignIn: true,
         name: displayName,
         email: email,
         photo: photoURL,
         success: true
-      }
-      return signInUser;
+      };
+      setUserToken();
+      return signedInUser;
     })
     .catch(err => {
       console.log(err);
       console.log(err.message);
     })
+}
+
+const setUserToken =() =>{
+  firebase.auth().currentUser.getIdToken(true).then(function(idToken){
+    sessionStorage.setItem('token',idToken )
+  }).catch( function(error) {
+
+  });
 }
 
 export const handleFbSignin = () => {
